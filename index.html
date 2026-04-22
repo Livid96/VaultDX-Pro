@@ -1,0 +1,626 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>AppStore DX Pro | Elite 2500 Edition</title>
+    <link rel="icon" type="image/x-icon" href="https://www.pngall.com/wp-content/uploads/13/Microsoft-Logo-PNG-HD-Image.png">
+    <script src="https://cdn.tailwindcss.com"></script>
+    <script src="https://unpkg.com/lucide@latest"></script>
+    <style>
+        @import url('https://fonts.googleapis.com/css2?family=Inter:wght@300;400;600;800;900&display=swap');
+        
+        :root { --accent: #3b82f6; --glass-bg: rgba(10, 15, 25, 0.98); }
+        body { background-color: #020408; color: #f1f5f9; font-family: 'Inter', sans-serif; overflow: hidden; height: 100vh; display: flex; flex-direction: column; }
+        
+        .glass { background: var(--glass-bg); backdrop-filter: blur(50px); border: 1px solid rgba(255,255,255,0.08); }
+        
+        /* Persistent Tab Bar with Draggable State */
+        .tab-bar { background: #000; padding: 8px 12px 0 12px; display: flex; gap: 4px; border-bottom: 1px solid rgba(255,255,255,0.1); align-items: flex-end; overflow-x: auto; scrollbar-width: none; }
+        .tab { 
+            height: 38px; min-width: 140px; background: rgba(255,255,255,0.03); 
+            border-radius: 10px 10px 0 0; display: flex; align-items: center; justify-content: space-between;
+            padding: 0 12px; font-size: 11px; cursor: grab; color: #64748b;
+            border: 1px solid rgba(255,255,255,0.08); border-bottom: none;
+            transition: all 0.2s cubic-bezier(0.4, 0, 0.2, 1); flex-shrink: 0;
+            user-select: none;
+        }
+        .tab.active { background: #0f172a; color: #3b82f6; border-color: rgba(59, 130, 246, 0.4); font-weight: 900; }
+        .tab.dragging { opacity: 0.4; transform: scale(0.95); border: 1px dashed #3b82f6; }
+        
+        /* Alphabet Filter Bar */
+        .alpha-bar { display: flex; gap: 2px; padding: 10px 20px; background: rgba(255,255,255,0.02); border-bottom: 1px solid rgba(255,255,255,0.05); overflow-x: auto; }
+        .alpha-btn { padding: 4px 10px; font-size: 10px; font-weight: 900; border-radius: 6px; color: #475569; transition: all 0.2s; border: 1px solid transparent; }
+        .alpha-btn:hover { color: #3b82f6; background: rgba(59, 130, 246, 0.1); }
+        .alpha-btn.active { color: white; background: #3b82f6; box-shadow: 0 0 15px rgba(59, 130, 246, 0.3); }
+
+        .dark-select { background: #0f172a; color: white; border: 1px solid rgba(255,255,255,0.1); border-radius: 8px; padding: 6px 12px; font-size: 11px; font-weight: 800; outline: none; appearance: none; cursor: pointer; }
+
+        /* VIEW MODES */
+        .grid-big { display: grid; grid-template-columns: repeat(auto-fill, minmax(320px, 1fr)); gap: 1.5rem; }
+        .grid-small { display: grid; grid-template-columns: repeat(auto-fill, minmax(200px, 1fr)); gap: 1rem; }
+        .list-rich { display: flex; flex-direction: column; gap: 0.75rem; }
+        .list-text { display: flex; flex-direction: column; gap: 0.4rem; }
+        .list-text .app-card { background: transparent !important; border: none !important; padding: 6px 0 !important; border-bottom: 1px solid rgba(255,255,255,0.05) !important; border-radius: 0 !important; transform: none !important; box-shadow: none !important; }
+
+        .app-card { background: rgba(255,255,255,0.02); border: 1px solid rgba(255,255,255,0.06); transition: all 0.3s ease; position: relative; overflow: hidden; }
+        .app-card:hover { border-color: var(--accent); background: rgba(59, 130, 246, 0.05); transform: translateY(-3px); box-shadow: 0 10px 30px -10px rgba(59,130,246,0.2); }
+        
+        .card-actions { position: absolute; top: 15px; right: 15px; display: flex; gap: 8px; z-index: 20; opacity: 0; transition: opacity 0.2s; }
+        .app-card:hover .card-actions { opacity: 1; }
+        .action-btn { background: rgba(15, 23, 42, 0.9); border-radius: 8px; border: 1px solid rgba(255,255,255,0.1); color: #94a3b8; padding: 6px; transition: all 0.2s; }
+        .action-btn:hover { color: white; border-color: var(--accent); }
+
+        .folder-row { transition: background 0.2s; border-radius: 12px; margin-bottom: 2px; }
+        .folder-row:hover { background: rgba(255,255,255,0.04); }
+
+        .btn-link { background: linear-gradient(to right, #3b82f6, #6366f1); padding: 7px 16px; border-radius: 10px; font-weight: 900; font-size: 10px; color: white; text-transform: uppercase; letter-spacing: 0.08em; box-shadow: 0 4px 12px rgba(59, 130, 246, 0.3); }
+
+        .search-container { position: relative; width: 300px; }
+        .search-input { width: 100%; background: rgba(255,255,255,0.05); border: 1px solid rgba(255,255,255,0.1); border-radius: 12px; padding: 8px 12px 8px 40px; font-size: 12px; color: white; outline: none; transition: all 0.2s; }
+        .search-input:focus { border-color: #3b82f6; background: rgba(255,255,255,0.1); width: 350px; }
+
+        .status-dot { width: 6px; height: 6px; border-radius: 50%; background: #22c55e; box-shadow: 0 0 8px #22c55e; }
+        .hidden { display: none !important; }
+        .no-scrollbar::-webkit-scrollbar { display: none; }
+        ::-webkit-scrollbar { width: 5px; }
+        ::-webkit-scrollbar-thumb { background: rgba(255,255,255,0.1); border-radius: 10px; }
+        
+        @keyframes slideUp { from { transform: translateY(20px); opacity: 0; } to { transform: translateY(0); opacity: 1; } }
+        .animate-up { animation: slideUp 0.3s cubic-bezier(0.4, 0, 0.2, 1) forwards; }
+    </style>
+</head>
+<body class="selection:bg-blue-500/30">
+
+    <div id="portal-screen" class="fixed inset-0 z-[500] bg-[#020408] flex items-center justify-center p-4">
+        <div class="glass w-full max-w-lg p-10 rounded-[3rem] shadow-2xl border border-white/5">
+            <div class="flex mb-8 bg-black/40 p-1.5 rounded-2xl border border-white/10">
+                <button id="tab-open" onclick="switchAuthTab('open')" class="flex-1 py-3 text-[11px] font-black text-blue-500 bg-slate-900 rounded-xl uppercase">Unlock Vault</button>
+                <button id="tab-create" onclick="switchAuthTab('create')" class="flex-1 py-3 text-[11px] font-black text-slate-500 uppercase">Initialize</button>
+            </div>
+
+            <div id="form-open" class="space-y-6">
+                <div class="space-y-2">
+                    <label class="text-[10px] font-bold text-slate-500 ml-4 uppercase tracking-widest">KDBX Source</label>
+                    <button onclick="pickFile()" id="open-kbdx-label" class="w-full bg-white/5 border border-white/10 p-5 rounded-2xl text-left text-sm text-slate-400 flex justify-between items-center hover:bg-white/10 transition-all">
+                        <span class="truncate">Select Repository...</span><i data-lucide="file-key" class="w-5 h-5 text-blue-500"></i>
+                    </button>
+                </div>
+                <div class="space-y-2">
+                    <label class="text-[10px] font-bold text-slate-500 ml-4 uppercase tracking-widest">Master Key</label>
+                    <div class="relative">
+                        <input type="password" id="open-pwd" class="w-full bg-white/5 border border-white/10 p-5 rounded-2xl outline-none text-white focus:border-blue-500/40" placeholder="••••••••">
+                        <button onclick="togglePass('open-pwd')" class="absolute right-5 top-5 text-slate-500 hover:text-white transition"><i data-lucide="eye" class="w-5 h-5"></i></button>
+                    </div>
+                </div>
+                <div class="flex justify-between px-2">
+                    <button id="forgot-link" onclick="handleRecovery()" class="hidden text-[10px] text-blue-500 font-black uppercase hover:underline">Forgot Password?</button>
+                </div>
+                <button onclick="unlockVault()" class="w-full bg-blue-600 hover:bg-blue-500 py-5 rounded-2xl font-black text-white uppercase tracking-[0.2em]">Decrypt Session</button>
+            </div>
+
+            <div id="form-create" class="hidden space-y-6">
+                <input type="text" id="create-name" placeholder="Database Label" class="w-full bg-white/5 border border-white/10 p-5 rounded-2xl outline-none text-white">
+                <div class="relative">
+                    <input type="password" id="create-pwd" class="w-full bg-white/5 border border-white/10 p-5 rounded-2xl outline-none text-white" placeholder="Master Password">
+                    <button onclick="togglePass('create-pwd')" class="absolute right-5 top-5 text-slate-500"><i data-lucide="eye" class="w-5 h-5"></i></button>
+                </div>
+                <div class="space-y-2 pt-2">
+                    <label class="text-[10px] font-bold text-slate-500 ml-4 uppercase">Security Recovery</label>
+                    <input type="text" id="create-q" placeholder="Recovery Question" class="w-full bg-white/5 border border-white/10 p-4 rounded-2xl outline-none text-white">
+                    <input type="text" id="create-a" placeholder="Security Answer" class="w-full bg-white/5 border border-white/10 p-4 rounded-2xl outline-none text-white">
+                </div>
+                <button onclick="createVault()" class="w-full bg-green-600 hover:bg-green-500 py-5 rounded-2xl font-black text-white uppercase tracking-widest">Generate .kdbx</button>
+            </div>
+        </div>
+    </div>
+
+    <header id="main-header" class="hidden shrink-0">
+        <div class="h-16 flex items-center justify-between px-6 bg-black/60 border-b border-white/5">
+            <div class="flex items-center gap-8">
+                <div class="flex items-center gap-4">
+                    <div class="w-10 h-10 bg-blue-600 rounded-xl flex items-center justify-center">
+                        <i data-lucide="shield-check" class="text-white w-6 h-6"></i>
+                    </div>
+                    <h1 class="text-lg font-black tracking-tighter">VAULT <span class="text-blue-500">DX</span></h1>
+                </div>
+                
+                <div class="search-container">
+                    <i data-lucide="search" class="absolute left-3 top-2.5 w-4 h-4 text-slate-500"></i>
+                    <input type="text" id="search-box" oninput="handleSearch()" class="search-input" placeholder="Search entries, links, notes...">
+                </div>
+            </div>
+
+            <div class="flex items-center gap-3">
+                <select id="view-select" onchange="changeView(this.value)" class="dark-select">
+                    <option value="grid-big">Standard Grid</option>
+                    <option value="grid-small">Compact Grid</option>
+                    <option value="list-rich">Rich List</option>
+                    <option value="list-text">Minimal Text</option>
+                </select>
+                <select id="sort-select" onchange="changeSort(this.value)" class="dark-select">
+                    <option value="name-asc">Sort A - Z</option>
+                    <option value="name-desc">Sort Z - A</option>
+                    <option value="date-new">Newest First</option>
+                </select>
+                <button onclick="openAddModal()" class="bg-blue-600 px-5 py-2 rounded-lg text-[11px] font-black uppercase">Add Entry</button>
+                <button onclick="openSettings()" class="p-2 text-slate-400 bg-white/5 rounded-lg hover:text-white transition"><i data-lucide="settings" class="w-5 h-5"></i></button>
+                <button onclick="location.reload()" class="p-2 text-red-500 bg-red-500/5 rounded-lg hover:bg-red-500/20 transition"><i data-lucide="power" class="w-5 h-5"></i></button>
+            </div>
+        </div>
+        
+        <div class="tab-bar no-scrollbar" id="global-tabs">
+            <div id="tab-universal" onclick="setCategory('Universal')" class="tab active">
+                <span class="tab-text"><i data-lucide="globe" class="inline w-3 h-3 mr-2"></i>Universal</span>
+            </div>
+            <div id="tab-list" class="flex gap-1 items-end"></div>
+            <button onclick="promptCategory('add')" class="p-2.5 text-slate-500 hover:text-white mb-1"><i data-lucide="plus-circle" class="w-4 h-4"></i></button>
+        </div>
+
+        <div class="alpha-bar no-scrollbar" id="alpha-bar">
+            <button onclick="setAlphaFilter('')" class="alpha-btn active" id="alpha-all">ALL</button>
+            </div>
+    </header>
+
+    <div class="flex flex-1 overflow-hidden">
+        <aside id="sidebar" class="hidden w-72 border-r border-white/5 bg-black/40 overflow-y-auto p-5 shrink-0">
+            <div class="flex items-center justify-between mb-8 px-1">
+                <div class="flex items-center gap-3 cursor-pointer group" onclick="resetFolderView()">
+                    <div class="w-9 h-9 bg-white/5 rounded-xl flex items-center justify-center border border-white/10 group-hover:border-blue-500">
+                        <i data-lucide="folder-tree" class="text-blue-500 w-5 h-5"></i>
+                    </div>
+                    <div class="flex flex-col">
+                        <span id="sidebar-root-title" class="text-[11px] font-black text-white uppercase tracking-wider">Root Directory</span>
+                        <span class="text-[8px] text-slate-500 font-bold uppercase">Show All</span>
+                    </div>
+                </div>
+                <button id="add-folder-btn" onclick="promptFolder('root')" class="p-2 bg-white/5 rounded-lg text-slate-400 hover:text-white"><i data-lucide="plus" class="w-4 h-4"></i></button>
+            </div>
+            <div id="folder-tree" class="space-y-1"></div>
+        </aside>
+
+        <main id="main-content" class="hidden flex-1 overflow-y-auto p-8 bg-[#020408]">
+            <div id="app-grid" class="grid-big"></div>
+        </main>
+    </div>
+
+    <div id="detail-modal" class="hidden fixed inset-0 z-[600] bg-black/95 backdrop-blur-2xl flex items-center justify-center p-6">
+        <div class="glass p-12 rounded-[3.5rem] w-full max-w-4xl border border-white/10 animate-up relative">
+            <button onclick="closeDetail()" class="absolute top-10 right-10 text-slate-500 hover:text-white"><i data-lucide="x" class="w-8 h-8"></i></button>
+            
+            <div class="flex flex-col md:flex-row gap-12">
+                <div id="detail-icon" class="w-64 h-64 bg-white/5 rounded-[2.5rem] border border-white/10 flex items-center justify-center overflow-hidden shrink-0 shadow-2xl">
+                    </div>
+                
+                <div class="flex-1 flex flex-col">
+                    <div class="mb-6">
+                        <h2 id="detail-name" class="text-5xl font-black text-white mb-2 tracking-tighter"></h2>
+                        <div id="detail-tag" class="flex items-center gap-2 text-blue-500 font-black text-xs uppercase tracking-[0.3em]"></div>
+                    </div>
+
+                    <div class="grid grid-cols-1 md:grid-cols-2 gap-6 mb-8">
+                        <div class="p-6 bg-white/5 rounded-3xl border border-white/5">
+                            <label class="text-[10px] font-black text-slate-500 uppercase block mb-2">Access Point</label>
+                            <a id="detail-link" href="#" target="_blank" class="text-blue-400 font-bold break-all hover:underline text-lg"></a>
+                        </div>
+                        <div class="p-6 bg-white/5 rounded-3xl border border-white/5">
+                            <label class="text-[10px] font-black text-slate-500 uppercase block mb-2">Sync Metadata</label>
+                            <span id="detail-date" class="text-slate-300 font-bold text-lg"></span>
+                        </div>
+                    </div>
+
+                    <div class="flex-1 p-8 bg-white/5 rounded-3xl border border-white/5 min-h-[200px]">
+                        <label class="text-[10px] font-black text-slate-500 uppercase block mb-4">Cryptographic Notes & Payload</label>
+                        <div id="detail-note" class="text-slate-300 leading-relaxed text-lg whitespace-pre-wrap font-medium"></div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <div id="settings-modal" class="hidden fixed inset-0 z-[400] bg-black/95 backdrop-blur-xl flex items-center justify-center p-6">
+        <div class="glass p-10 rounded-[3rem] w-full max-w-md border border-white/10 animate-up">
+            <h3 class="text-2xl font-black mb-2 text-white uppercase tracking-tighter">Vault Protocol</h3>
+            <p class="text-slate-500 text-[10px] mb-8 uppercase font-black tracking-widest">Update Master Security</p>
+            <div class="space-y-4">
+                <div class="relative">
+                    <input type="password" id="new-master-pwd" placeholder="New Master Key" class="w-full bg-white/5 border border-white/10 p-4 rounded-2xl outline-none text-white focus:border-blue-500">
+                    <button onclick="togglePass('new-master-pwd')" class="absolute right-5 top-4 text-slate-500"><i data-lucide="eye" class="w-5 h-5"></i></button>
+                </div>
+                <input type="text" id="new-q" placeholder="Update Question" class="w-full bg-white/5 border border-white/10 p-4 rounded-2xl outline-none text-white">
+                <input type="text" id="new-a" placeholder="Update Answer" class="w-full bg-white/5 border border-white/10 p-4 rounded-2xl outline-none text-white">
+            </div>
+            <div class="flex justify-end gap-5 mt-10 pt-6 border-t border-white/5">
+                <button onclick="closeSettings()" class="font-bold text-slate-500 px-4 text-sm">Discard</button>
+                <button onclick="updateSecurity()" class="bg-blue-600 px-10 py-4 rounded-2xl font-black text-xs uppercase tracking-widest hover:bg-blue-500">Apply Update</button>
+            </div>
+        </div>
+    </div>
+
+    <div id="app-modal" class="hidden fixed inset-0 z-[400] bg-black/95 backdrop-blur-xl flex items-center justify-center p-6">
+        <div class="glass p-10 rounded-[3rem] w-full max-w-xl border border-white/10 animate-up">
+            <h3 class="text-2xl font-black mb-8 text-white uppercase tracking-tighter">Entry Definition</h3>
+            <div class="space-y-4">
+                <input type="text" id="app-name" placeholder="Application Title" class="w-full bg-white/5 border border-white/10 p-4 rounded-2xl outline-none text-white">
+                <input type="text" id="app-link" placeholder="Access Link / URL" class="w-full bg-white/5 border border-white/10 p-4 rounded-2xl outline-none text-white">
+                <input type="text" id="app-icon" placeholder="Image URI (Optional)" class="w-full bg-white/5 border border-white/10 p-4 rounded-2xl outline-none text-white">
+                <textarea id="app-note" placeholder="Cryptographic Notes..." rows="6" class="w-full bg-white/5 border border-white/10 p-4 rounded-2xl outline-none text-white resize-none"></textarea>
+            </div>
+            <div class="flex justify-end gap-5 mt-10 pt-6 border-t border-white/5">
+                <button onclick="closeAppModal()" class="font-bold text-slate-500 px-4 text-sm">Cancel</button>
+                <button onclick="saveApp()" class="bg-blue-600 px-10 py-4 rounded-2xl font-black text-xs uppercase tracking-widest">Commit Sync</button>
+            </div>
+        </div>
+    </div>
+
+    <div id="modern-modal" class="hidden fixed inset-0 z-[700] bg-black/90 flex items-center justify-center p-4">
+        <div class="glass w-full max-w-md p-8 rounded-[2.5rem] border border-white/10 animate-up">
+            <h3 id="m-title" class="text-xl font-black mb-2 uppercase text-blue-500">Request</h3>
+            <p id="m-desc" class="text-slate-400 mb-8 text-sm"></p>
+            <div id="m-input-area" class="hidden mb-8">
+                <input type="text" id="m-input" class="w-full bg-white/5 border border-white/10 p-4 rounded-xl outline-none text-white focus:border-blue-500">
+            </div>
+            <div class="flex justify-end gap-4">
+                <button id="m-cancel" class="px-6 py-3 font-bold text-slate-500 text-sm">Abort</button>
+                <button id="m-confirm" class="bg-blue-600 px-8 py-3 rounded-xl font-black text-white uppercase text-[10px]">Execute</button>
+            </div>
+        </div>
+    </div>
+
+    <script>
+        let dbHandle;
+        let vaultData = { categories: [], folders: [], apps: [], expanded: [], masterHash: "", recoveryQ: "", recoveryA: "" };
+        let currentCategory = 'Universal', currentFolderId = null, editingId = null, dragSource = null;
+        let currentView = localStorage.getItem('dx_view') || 'grid-big', currentSort = localStorage.getItem('dx_sort') || 'name-asc';
+        let searchQuery = '', alphaFilter = '';
+
+        // --- AUTH & FILE MGMT ---
+        function switchAuthTab(m) {
+            const isO = m === 'open';
+            document.getElementById('form-open').classList.toggle('hidden', !isO);
+            document.getElementById('form-create').classList.toggle('hidden', isO);
+            document.getElementById('tab-open').className = `flex-1 py-3 text-[11px] font-black ${isO?'text-blue-500 bg-slate-900 rounded-xl':'text-slate-500'}`;
+            document.getElementById('tab-create').className = `flex-1 py-3 text-[11px] font-black ${!isO?'text-blue-500 bg-slate-900 rounded-xl':'text-slate-500'}`;
+        }
+
+        function togglePass(id) { const e = document.getElementById(id); e.type = e.type === 'password' ? 'text' : 'password'; }
+
+        async function pickFile() {
+            try {
+                const [handle] = await window.showOpenFilePicker({ types: [{ accept: { 'application/octet-stream': ['.kdbx'] } }] });
+                dbHandle = handle;
+                const f = await dbHandle.getFile(), t = await f.text(), d = JSON.parse(t);
+                Object.assign(vaultData, d);
+                document.getElementById('open-kbdx-label').innerHTML = `<span class="text-blue-400 font-black truncate">${handle.name}</span>`;
+                if(vaultData.recoveryQ) document.getElementById('forgot-link').classList.remove('hidden');
+                lucide.createIcons();
+            } catch(e) {}
+        }
+
+        async function createVault() {
+            const n = document.getElementById('create-name').value, p = document.getElementById('create-pwd').value;
+            const q = document.getElementById('create-q').value, a = document.getElementById('create-a').value;
+            if(!n || !p || !q || !a) return showModern("Error", "All fields required.");
+            try {
+                dbHandle = await window.showSaveFilePicker({ suggestedName: `${n}.kdbx` });
+                vaultData.masterHash = p; vaultData.recoveryQ = q; vaultData.recoveryA = a;
+                vaultData.categories = ["Social", "Work", "Private"];
+                await syncToDisk(); launch();
+            } catch(e) {}
+        }
+
+        async function unlockVault() {
+            if(!dbHandle) return showModern("Error", "No vault file selected.");
+            const p = document.getElementById('open-pwd').value;
+            if(vaultData.masterHash === p) { launch(); }
+            else showModern("Denied", "Incorrect Master Password.");
+        }
+
+        function handleRecovery() {
+            showModern("Recovery", `Q: ${vaultData.recoveryQ}`, (ans) => {
+                if(ans === vaultData.recoveryA) showModern("Recovered", `Pass: ${vaultData.masterHash}`);
+                else showModern("Failed", "Incorrect answer.");
+            }, true);
+        }
+
+        async function syncToDisk() {
+            if(!dbHandle) return;
+            const writer = await dbHandle.createWritable();
+            await writer.write(JSON.stringify(vaultData, null, 2));
+            await writer.close();
+        }
+
+        function launch() {
+            document.getElementById('portal-screen').classList.add('hidden');
+            ['main-header', 'sidebar', 'main-content'].forEach(id => document.getElementById(id).classList.remove('hidden'));
+            init();
+        }
+
+        // --- FILTERS & SEARCH ---
+        function handleSearch() {
+            searchQuery = document.getElementById('search-box').value.toLowerCase();
+            renderApps();
+        }
+
+        function setAlphaFilter(char) {
+            alphaFilter = char;
+            document.querySelectorAll('.alpha-btn').forEach(b => b.classList.toggle('active', b.innerText === (char || 'ALL')));
+            renderApps();
+        }
+
+        function initAlphaBar() {
+            const bar = document.getElementById('alpha-bar');
+            bar.innerHTML = '<button onclick="setAlphaFilter(\'\')" class="alpha-btn active" id="alpha-all">ALL</button>';
+            "ABCDEFGHIJKLMNOPQRSTUVWXYZ".split('').forEach(char => {
+                const btn = document.createElement('button');
+                btn.className = 'alpha-btn';
+                btn.innerText = char;
+                btn.onclick = () => setAlphaFilter(char);
+                bar.appendChild(btn);
+            });
+        }
+
+        // --- DRAG & DROP TABS ---
+        function initDragAndDrop() {
+            const tabs = document.querySelectorAll('.tab[draggable="true"]');
+            tabs.forEach(tab => {
+                tab.addEventListener('dragstart', (e) => { dragSource = tab; tab.classList.add('dragging'); });
+                tab.addEventListener('dragend', () => tab.classList.remove('dragging'));
+                tab.addEventListener('dragover', (e) => e.preventDefault());
+                tab.addEventListener('drop', (e) => {
+                    if (dragSource !== tab) {
+                        const from = vaultData.categories.indexOf(dragSource.dataset.name);
+                        const to = vaultData.categories.indexOf(tab.dataset.name);
+                        vaultData.categories.splice(from, 1);
+                        vaultData.categories.splice(to, 0, dragSource.dataset.name);
+                        syncToDisk(); renderTabs();
+                    }
+                });
+            });
+        }
+
+        // --- HIERARCHY HELPERS ---
+        function getFolderPathTag(folderId, category) {
+            let path = [category];
+            if(!folderId || folderId === 'root') return path[0];
+            let current = vaultData.folders.find(f => f.id === folderId);
+            let subPath = [];
+            while(current) { subPath.unshift(current.name); current = vaultData.folders.find(f => f.id === current.parentId); }
+            return path[0] + (subPath.length ? " / " + subPath.join(' / ') : "");
+        }
+
+        // --- EXPANDED VIEW ---
+        function openDetail(id) {
+            const app = vaultData.apps.find(a => a.id === id);
+            if(!app) return;
+            
+            document.getElementById('detail-name').innerText = app.name;
+            document.getElementById('detail-tag').innerText = getFolderPathTag(app.folderId, app.category);
+            document.getElementById('detail-link').innerText = app.link;
+            document.getElementById('detail-link').href = app.link;
+            document.getElementById('detail-date').innerText = new Date(app.date).toLocaleString();
+            document.getElementById('detail-note').innerText = app.note || "No private notes found for this entry.";
+            
+            const iconContainer = document.getElementById('detail-icon');
+            iconContainer.innerHTML = app.icon ? 
+                `<img src="${app.icon}" class="w-full h-full object-cover">` : 
+                `<i data-lucide="package" class="w-24 h-24 text-slate-700"></i>`;
+            
+            document.getElementById('detail-modal').classList.remove('hidden');
+            lucide.createIcons();
+        }
+
+        function closeDetail() { document.getElementById('detail-modal').classList.add('hidden'); }
+
+        // --- RENDERING CORE ---
+        function init() { 
+            initAlphaBar();
+            renderTabs(); 
+            renderFolders(); 
+            renderApps(); 
+            lucide.createIcons(); 
+        }
+
+        function renderTabs() {
+            const list = document.getElementById('tab-list'); list.innerHTML = '';
+            document.getElementById('tab-universal').className = `tab ${currentCategory==='Universal'?'active':''}`;
+            vaultData.categories.forEach(c => {
+                const div = document.createElement('div');
+                div.className = `tab group ${currentCategory === c ? 'active' : ''}`;
+                div.draggable = true; div.dataset.name = c;
+                div.onclick = () => { currentCategory = c; currentFolderId = null; init(); };
+                div.innerHTML = `<span class="tab-text font-black uppercase">${c}</span>
+                    <div class="flex gap-1.5 opacity-0 group-hover:opacity-100 transition ml-4">
+                        <i data-lucide="edit-3" onclick="promptCategory('edit', '${c}', event)" class="w-3 h-3 hover:text-blue-400"></i>
+                        <i data-lucide="x" onclick="deleteCategory('${c}', event)" class="w-3 h-3 hover:text-red-500"></i>
+                    </div>`;
+                list.appendChild(div);
+            });
+            initDragAndDrop(); lucide.createIcons();
+        }
+
+        function renderFolders() {
+            const tree = document.getElementById('folder-tree'), sidebar = document.getElementById('sidebar');
+            if (currentCategory === 'Universal') { sidebar.classList.add('hidden'); return; }
+            sidebar.classList.remove('hidden'); tree.innerHTML = '';
+            const folders = vaultData.folders.filter(f => f.category === currentCategory);
+            const build = (pid, lv) => {
+                folders.filter(f => f.parentId === pid).forEach(f => {
+                    const isExp = vaultData.expanded.includes(f.id), hasChild = folders.some(c => c.parentId === f.id);
+                    const row = document.createElement('div');
+                    row.className = `folder-row flex items-center justify-between p-2.5 cursor-pointer group ${currentFolderId === f.id ? 'bg-blue-600/10 text-blue-500' : 'text-slate-400'}`;
+                    row.style.marginLeft = `${lv * 15}px`;
+                    row.onclick = () => { currentFolderId = f.id; init(); };
+                    row.innerHTML = `<div class="flex items-center gap-2 truncate">
+                        ${hasChild ? `<i data-lucide="${isExp?'chevron-down':'chevron-right'}" onclick="toggleFolder('${f.id}', event)" class="w-3 h-3"></i>` : `<span class="w-3"></span>`}
+                        <i data-lucide="folder" class="w-4 h-4"></i><span class="text-[11px] font-bold truncate">${f.name}</span></div>
+                        <div class="flex gap-1.5 opacity-0 group-hover:opacity-100 transition"><i data-lucide="plus" onclick="promptFolder('${f.id}', event)" class="w-3 h-3 hover:text-green-500"></i><i data-lucide="trash-2" onclick="deleteFolder('${f.id}', event)" class="w-3 h-3 hover:text-red-500"></i></div>`;
+                    tree.appendChild(row);
+                    if (isExp) build(f.id, lv + 1);
+                });
+            };
+            build('root', 0); lucide.createIcons();
+        }
+
+        function renderApps() {
+            const grid = document.getElementById('app-grid'); grid.className = currentView; grid.innerHTML = '';
+            let apps = currentCategory === 'Universal' ? [...vaultData.apps] : vaultData.apps.filter(a => a.category === currentCategory);
+            
+            if(currentFolderId && currentCategory !== 'Universal') apps = apps.filter(a => a.folderId === currentFolderId);
+            
+            // Apply Search
+            if(searchQuery) {
+                apps = apps.filter(a => 
+                    a.name.toLowerCase().includes(searchQuery) || 
+                    a.link.toLowerCase().includes(searchQuery) || 
+                    a.note.toLowerCase().includes(searchQuery)
+                );
+            }
+            
+            // Apply Alphabet Filter
+            if(alphaFilter) {
+                apps = apps.filter(a => a.name.toUpperCase().startsWith(alphaFilter));
+            }
+
+            // Apply Sorting
+            apps.sort((a,b) => {
+                if(currentSort === 'name-asc') return a.name.localeCompare(b.name);
+                if(currentSort === 'name-desc') return b.name.localeCompare(a.name);
+                return b.date - a.date;
+            });
+
+            if(!apps.length) { 
+                grid.innerHTML = `<div class="col-span-full py-40 flex flex-col items-center justify-center opacity-20"><i data-lucide="database-zap" class="w-12 h-12 mb-4"></i><span class="text-[10px] font-black uppercase">No results found in this sector</span></div>`; 
+                lucide.createIcons(); return; 
+            }
+
+            apps.forEach(app => {
+                const card = document.createElement('div');
+                card.className = `app-card rounded-[2.5rem] p-6 group animate-up`;
+                const tag = getFolderPathTag(app.folderId, app.category);
+                card.innerHTML = `
+                    <div class="card-actions">
+                        <button onclick="editApp('${app.id}')" class="action-btn hover:text-blue-400"><i data-lucide="edit-3" class="w-4 h-4"></i></button>
+                        <button onclick="deleteApp('${app.id}')" class="action-btn hover:text-red-500"><i data-lucide="trash-2" class="w-4 h-4"></i></button>
+                    </div>
+                    <div class="flex items-center gap-4 mb-6">
+                        <div onclick="openDetail('${app.id}')" class="card-icon-area w-16 h-16 bg-white/5 rounded-2xl flex items-center justify-center border border-white/5 overflow-hidden cursor-pointer hover:border-blue-500 transition-all">
+                            ${app.icon ? `<img src="${app.icon}" class="w-full h-full object-cover">` : `<i data-lucide="package" class="text-slate-700 w-7 h-7"></i>`}
+                        </div>
+                        <div class="truncate">
+                            <h4 class="font-black text-white truncate text-base tracking-tight">${app.name}</h4>
+                            <div class="flex items-center gap-2 mt-1"><div class="status-dot"></div><p class="text-[9px] text-blue-500 font-black uppercase tracking-widest truncate">${tag}</p></div>
+                        </div>
+                    </div>
+                    <div class="flex justify-between items-center"><a href="${app.link}" target="_blank" class="btn-link">Launch</a><span class="text-[9px] text-slate-700 font-black">${new Date(app.date).toLocaleDateString()}</span></div>`;
+                grid.appendChild(card);
+            });
+            lucide.createIcons();
+        }
+
+        // --- ACTION HANDLERS ---
+        function openAddModal() { editingId = null; ['app-name','app-link','app-icon','app-note'].forEach(id=>document.getElementById(id).value=''); document.getElementById('app-modal').classList.remove('hidden'); }
+        function closeAppModal() { document.getElementById('app-modal').classList.add('hidden'); }
+        
+        async function saveApp() {
+            const n = document.getElementById('app-name').value, l = document.getElementById('app-link').value, i = document.getElementById('app-icon').value, nt = document.getElementById('app-note').value;
+            if(!n || !l) return;
+            if(editingId) Object.assign(vaultData.apps.find(x=>x.id===editingId), {name:n, link:l, icon:i, note:nt});
+            else vaultData.apps.push({id:'a'+Date.now(), category:currentCategory, folderId:currentFolderId||'root', name:n, link:l, icon:i, note:nt, date:Date.now()});
+            await syncToDisk(); closeAppModal(); init();
+        }
+
+        function editApp(id) { 
+            const a = vaultData.apps.find(x => x.id === id); 
+            editingId = id; 
+            document.getElementById('app-name').value = a.name; 
+            document.getElementById('app-link').value = a.link; 
+            document.getElementById('app-icon').value = a.icon; 
+            document.getElementById('app-note').value = a.note; 
+            document.getElementById('app-modal').classList.remove('hidden'); 
+        }
+
+        async function deleteApp(id) { 
+            showModern("Delete", "Remove this entry?", async ok => { 
+                if(ok) { vaultData.apps = vaultData.apps.filter(x => x.id !== id); await syncToDisk(); init(); } 
+            }); 
+        }
+
+        function toggleFolder(id, e) { e.stopPropagation(); const idx = vaultData.expanded.indexOf(id); if(idx > -1) vaultData.expanded.splice(idx, 1); else vaultData.expanded.push(id); renderFolders(); }
+        
+        function promptFolder(pid, e) { 
+            if(e) e.stopPropagation(); 
+            showModern("New Folder", "Label:", async v => { 
+                if(v) { vaultData.folders.push({id:'f'+Date.now(), parentId:pid, category:currentCategory, name:v}); await syncToDisk(); renderFolders(); } 
+            }, true); 
+        }
+
+        function resetFolderView() { currentFolderId = null; init(); }
+        
+        async function deleteFolder(id, e) { 
+            e.stopPropagation(); 
+            showModern("Purge", "Delete folder?", async ok => { 
+                if(ok) { vaultData.folders = vaultData.folders.filter(f=>f.id!==id); await syncToDisk(); init(); } 
+            }); 
+        }
+
+        function setCategory(c) { currentCategory = c; currentFolderId = null; init(); }
+        
+        function promptCategory(m, o, e) { 
+            if(e) e.stopPropagation(); 
+            showModern(m==='add'?"New Tab":"Edit", "Label:", async v => { 
+                if(!v) return; 
+                if(m==='add') vaultData.categories.push(v); 
+                else { 
+                    const i = vaultData.categories.indexOf(o); 
+                    vaultData.categories[i]=v; 
+                    vaultData.apps.forEach(a => { if(a.category === o) a.category = v; }); 
+                    vaultData.folders.forEach(f => { if(f.category === o) f.category = v; }); 
+                    if(currentCategory === o) currentCategory = v; 
+                } 
+                await syncToDisk(); init(); 
+            }, true, o); 
+        }
+
+        async function deleteCategory(c, e) { 
+            e.stopPropagation(); 
+            showModern("Wipe", `Destroy ${c}?`, async ok => { 
+                if(ok) { vaultData.categories=vaultData.categories.filter(x=>x!==c); if(currentCategory===c) currentCategory='Universal'; await syncToDisk(); init(); } 
+            }); 
+        }
+
+        function openSettings() { 
+            document.getElementById('new-master-pwd').value = vaultData.masterHash; 
+            document.getElementById('new-q').value = vaultData.recoveryQ; 
+            document.getElementById('new-a').value = vaultData.recoveryA; 
+            document.getElementById('settings-modal').classList.remove('hidden'); 
+        }
+        function closeSettings() { document.getElementById('settings-modal').classList.add('hidden'); }
+        
+        async function updateSecurity() { 
+            vaultData.masterHash = document.getElementById('new-master-pwd').value; 
+            vaultData.recoveryQ = document.getElementById('new-q').value; 
+            vaultData.recoveryA = document.getElementById('new-a').value; 
+            await syncToDisk(); closeSettings(); showModern("Done", "Security updated."); 
+        }
+
+        function showModern(t, d, onC, isI=false, v="") { 
+            const m = document.getElementById('modern-modal'); 
+            document.getElementById('m-title').innerText = t; 
+            document.getElementById('m-desc').innerText = d; 
+            const ia = document.getElementById('m-input-area'); 
+            const i = document.getElementById('m-input'); 
+            ia.classList.toggle('hidden', !isI); 
+            if(isI) i.value = v; 
+            m.classList.remove('hidden'); 
+            document.getElementById('m-confirm').onclick = () => { m.classList.add('hidden'); if(onC) onC(isI?i.value:true); }; 
+            document.getElementById('m-cancel').onclick = () => m.classList.add('hidden'); 
+        }
+
+        function changeView(v) { currentView = v; localStorage.setItem('dx_view', v); renderApps(); }
+        function changeSort(s) { currentSort = s; localStorage.setItem('dx_sort', s); renderApps(); }
+        
+        window.onload = () => lucide.createIcons();
+    </script>
+</body>
+</html>
