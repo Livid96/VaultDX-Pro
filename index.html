@@ -122,7 +122,7 @@
                     <div class="w-10 h-10 bg-blue-600 rounded-xl flex items-center justify-center">
                         <i data-lucide="shield-check" class="text-white w-6 h-6"></i>
                     </div>
-                    <h1 class="text-lg font-black tracking-tighter">VAULT <span class="text-blue-500">DX</span></h1>
+                    <h1 class="text-lg font-black tracking-tighter">AppDX <span class="text-blue-500">Pro</span></h1>
                 </div>
                 
                 <div class="search-container">
@@ -200,8 +200,8 @@
 
                     <div class="grid grid-cols-1 md:grid-cols-2 gap-6 mb-8">
                         <div class="p-6 bg-white/5 rounded-3xl border border-white/5">
-                            <label class="text-[10px] font-black text-slate-500 uppercase block mb-2">Access Point</label>
-                            <a id="detail-link" href="#" target="_blank" class="text-blue-400 font-bold break-all hover:underline text-lg"></a>
+                            <label class="text-[10px] font-black text-slate-500 uppercase block mb-2">Access Points</label>
+                            <div id="detail-links-container" class="flex flex-col gap-2"></div>
                         </div>
                         <div class="p-6 bg-white/5 rounded-3xl border border-white/5">
                             <label class="text-[10px] font-black text-slate-500 uppercase block mb-2">Sync Metadata</label>
@@ -237,12 +237,19 @@
         </div>
     </div>
 
-    <div id="app-modal" class="hidden fixed inset-0 z-[400] bg-black/95 backdrop-blur-xl flex items-center justify-center p-6">
-        <div class="glass p-10 rounded-[3rem] w-full max-w-xl border border-white/10 animate-up">
+    <div id="app-modal" class="hidden fixed inset-0 z-[400] bg-black/95 backdrop-blur-xl flex items-center justify-center p-6 overflow-y-auto">
+        <div class="glass p-10 rounded-[3rem] w-full max-w-xl border border-white/10 animate-up my-auto">
             <h3 class="text-2xl font-black mb-8 text-white uppercase tracking-tighter">Entry Definition</h3>
             <div class="space-y-4">
                 <input type="text" id="app-name" placeholder="Application Title" class="w-full bg-white/5 border border-white/10 p-4 rounded-2xl outline-none text-white">
-                <input type="text" id="app-link" placeholder="Access Link / URL" class="w-full bg-white/5 border border-white/10 p-4 rounded-2xl outline-none text-white">
+                
+                <div class="space-y-2">
+                    <label class="text-[10px] font-bold text-slate-500 ml-4 uppercase">Access Links</label>
+                    <div id="links-input-list" class="space-y-2">
+                        </div>
+                    <button onclick="addLinkInput()" class="w-full border border-dashed border-white/20 p-3 rounded-xl text-[10px] font-black text-slate-400 hover:text-white hover:border-blue-500 transition uppercase">+ Add Resource Link</button>
+                </div>
+
                 <input type="text" id="app-icon" placeholder="Image URI (Optional)" class="w-full bg-white/5 border border-white/10 p-4 rounded-2xl outline-none text-white">
                 <textarea id="app-note" placeholder="Cryptographic Notes..." rows="6" class="w-full bg-white/5 border border-white/10 p-4 rounded-2xl outline-none text-white resize-none"></textarea>
             </div>
@@ -389,6 +396,19 @@
             return path[0] + (subPath.length ? " / " + subPath.join(' / ') : "");
         }
 
+        // --- MULTI-LINK HANDLERS ---
+        function addLinkInput(value = "") {
+            const container = document.getElementById('links-input-list');
+            const div = document.createElement('div');
+            div.className = "flex gap-2 animate-up";
+            div.innerHTML = `
+                <input type="text" value="${value}" placeholder="https://..." class="link-input flex-1 bg-white/5 border border-white/10 p-3 rounded-xl outline-none text-white text-xs focus:border-blue-500">
+                <button onclick="this.parentElement.remove()" class="p-3 bg-red-500/10 text-red-500 rounded-xl hover:bg-red-500/20"><i data-lucide="trash-2" class="w-4 h-4"></i></button>
+            `;
+            container.appendChild(div);
+            lucide.createIcons();
+        }
+
         // --- EXPANDED VIEW ---
         function openDetail(id) {
             const app = vaultData.apps.find(a => a.id === id);
@@ -396,8 +416,20 @@
             
             document.getElementById('detail-name').innerText = app.name;
             document.getElementById('detail-tag').innerText = getFolderPathTag(app.folderId, app.category);
-            document.getElementById('detail-link').innerText = app.link;
-            document.getElementById('detail-link').href = app.link;
+            
+            // Handle Multiple Links
+            const linksContainer = document.getElementById('detail-links-container');
+            linksContainer.innerHTML = '';
+            const links = Array.isArray(app.links) ? app.links : (app.link ? [app.link] : []);
+            if(links.length === 0) linksContainer.innerHTML = '<span class="text-slate-600 italic text-sm">No links found</span>';
+            links.forEach((link, idx) => {
+                const a = document.createElement('a');
+                a.href = link; a.target = "_blank";
+                a.className = "text-blue-400 font-bold break-all hover:underline text-lg block truncate";
+                a.innerText = link;
+                linksContainer.appendChild(a);
+            });
+
             document.getElementById('detail-date').innerText = new Date(app.date).toLocaleString();
             document.getElementById('detail-note').innerText = app.note || "No private notes found for this entry.";
             
@@ -472,7 +504,8 @@
             if(searchQuery) {
                 apps = apps.filter(a => 
                     a.name.toLowerCase().includes(searchQuery) || 
-                    a.link.toLowerCase().includes(searchQuery) || 
+                    (a.links && a.links.some(l => l.toLowerCase().includes(searchQuery))) ||
+                    (a.link && a.link.toLowerCase().includes(searchQuery)) || 
                     a.note.toLowerCase().includes(searchQuery)
                 );
             }
@@ -498,6 +531,8 @@
                 const card = document.createElement('div');
                 card.className = `app-card rounded-[2.5rem] p-6 group animate-up`;
                 const tag = getFolderPathTag(app.folderId, app.category);
+                const firstLink = Array.isArray(app.links) ? app.links[0] : app.link;
+
                 card.innerHTML = `
                     <div class="card-actions">
                         <button onclick="editApp('${app.id}')" class="action-btn hover:text-blue-400"><i data-lucide="edit-3" class="w-4 h-4"></i></button>
@@ -512,21 +547,38 @@
                             <div class="flex items-center gap-2 mt-1"><div class="status-dot"></div><p class="text-[9px] text-blue-500 font-black uppercase tracking-widest truncate">${tag}</p></div>
                         </div>
                     </div>
-                    <div class="flex justify-between items-center"><a href="${app.link}" target="_blank" class="btn-link">Launch</a><span class="text-[9px] text-slate-700 font-black">${new Date(app.date).toLocaleDateString()}</span></div>`;
+                    <div class="flex justify-between items-center">
+                        <a href="${firstLink || '#'}" target="_blank" class="btn-link ${!firstLink?'opacity-50 pointer-events-none':''}">Launch</a>
+                        <span class="text-[9px] text-slate-700 font-black">${new Date(app.date).toLocaleDateString()}</span>
+                    </div>`;
                 grid.appendChild(card);
             });
             lucide.createIcons();
         }
 
         // --- ACTION HANDLERS ---
-        function openAddModal() { editingId = null; ['app-name','app-link','app-icon','app-note'].forEach(id=>document.getElementById(id).value=''); document.getElementById('app-modal').classList.remove('hidden'); }
+        function openAddModal() { 
+            editingId = null; 
+            ['app-name','app-icon','app-note'].forEach(id=>document.getElementById(id).value=''); 
+            document.getElementById('links-input-list').innerHTML = '';
+            addLinkInput(); // Start with one empty link
+            document.getElementById('app-modal').classList.remove('hidden'); 
+        }
         function closeAppModal() { document.getElementById('app-modal').classList.add('hidden'); }
         
         async function saveApp() {
-            const n = document.getElementById('app-name').value, l = document.getElementById('app-link').value, i = document.getElementById('app-icon').value, nt = document.getElementById('app-note').value;
-            if(!n || !l) return;
-            if(editingId) Object.assign(vaultData.apps.find(x=>x.id===editingId), {name:n, link:l, icon:i, note:nt});
-            else vaultData.apps.push({id:'a'+Date.now(), category:currentCategory, folderId:currentFolderId||'root', name:n, link:l, icon:i, note:nt, date:Date.now()});
+            const n = document.getElementById('app-name').value, i = document.getElementById('app-icon').value, nt = document.getElementById('app-note').value;
+            const linkInputs = document.querySelectorAll('.link-input');
+            const links = Array.from(linkInputs).map(inp => inp.value).filter(val => val.trim() !== "");
+
+            if(!n || links.length === 0) return showModern("Required", "Name and at least one Link required.");
+            
+            if(editingId) {
+                const existing = vaultData.apps.find(x=>x.id===editingId);
+                Object.assign(existing, {name:n, links:links, link: links[0], icon:i, note:nt});
+            } else {
+                vaultData.apps.push({id:'a'+Date.now(), category:currentCategory, folderId:currentFolderId||'root', name:n, links:links, link: links[0], icon:i, note:nt, date:Date.now()});
+            }
             await syncToDisk(); closeAppModal(); init();
         }
 
@@ -534,9 +586,15 @@
             const a = vaultData.apps.find(x => x.id === id); 
             editingId = id; 
             document.getElementById('app-name').value = a.name; 
-            document.getElementById('app-link').value = a.link; 
             document.getElementById('app-icon').value = a.icon; 
             document.getElementById('app-note').value = a.note; 
+            
+            const linkContainer = document.getElementById('links-input-list');
+            linkContainer.innerHTML = '';
+            const links = Array.isArray(a.links) ? a.links : (a.link ? [a.link] : []);
+            links.forEach(l => addLinkInput(l));
+            if(links.length === 0) addLinkInput();
+
             document.getElementById('app-modal').classList.remove('hidden'); 
         }
 
