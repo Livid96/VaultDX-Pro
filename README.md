@@ -1,6 +1,6 @@
-# 🛡️ Vault DX Pro
+# 🛡️ AppDX Pro
 
-**Vault DX Pro** is a high-performance, client-side password and application manager built for power users. It provides a sleek, "App Store" style interface for managing credentials, URLs, and encrypted technical notes using a local-first security model.
+**AppDX Pro** is a high-performance, client-side password and application manager built for power users. It provides a sleek, "App Store" style interface for managing credentials, URLs, and encrypted technical notes using a local-first security model.
 
 ![Version](https://img.shields.io/badge/version-2.5.0-blue.svg?style=for-the-badge)
 ![License](https://img.shields.io/badge/license-MIT-green.svg?style=for-the-badge)
