@@ -1,0 +1,418 @@
+{
+  "categories": [
+    "Editing",
+    "Coding",
+    "APP"
+  ],
+  "folders": [
+    {
+      "id": "f1776882037144",
+      "parentId": "root",
+      "category": "Editing",
+      "name": "Plugins"
+    },
+    {
+      "id": "f1776882239263",
+      "parentId": "f1776882037144",
+      "category": "Editing",
+      "name": "Premiere"
+    },
+    {
+      "id": "f1776884347922",
+      "parentId": "f1776882037144",
+      "category": "Editing",
+      "name": "AE"
+    }
+  ],
+  "apps": [
+    {
+      "id": "a1776875154966",
+      "category": "Editing",
+      "name": "Abobe Premiere",
+      "link": "https://filecr.com/windows/adobe-premiere-pro-0064/?id=587884479000",
+      "icon": "https://upload.wikimedia.org/wikipedia/commons/thumb/4/40/Adobe_Premiere_Pro_CC_icon.svg/960px-Adobe_Premiere_Pro_CC_icon.svg.png?_=20210729021549",
+      "date": 1776876038501,
+      "note": "PP",
+      "links": [
+        "https://filecr.com/windows/adobe-premiere-pro-0064/?id=587884479000"
+      ]
+    },
+    {
+      "id": "a1776881905051",
+      "category": "Editing",
+      "folderId": "root",
+      "name": "Adobe After Effects",
+      "link": "https://filecr.com/windows/adobe-after-effects-0038/?id=476530170000",
+      "icon": "https://upload.wikimedia.org/wikipedia/commons/thumb/c/cb/Adobe_After_Effects_CC_icon.svg/960px-Adobe_After_Effects_CC_icon.svg.png",
+      "note": "",
+      "date": 1776881905051,
+      "links": [
+        "https://filecr.com/windows/adobe-after-effects-0038/?id=476530170000"
+      ]
+    },
+    {
+      "id": "a1776882306714",
+      "category": "Editing",
+      "folderId": "f1776882239263",
+      "name": "Excalibur v1.3.2",
+      "link": "https://intro-hd.net/excalibur-for-premiere-pro-win-mac/",
+      "icon": "https://static1.squarespace.com/static/5d090703bfcf6300017faaa8/t/6960d4df4209b252e296907f/1767953631833/Excalibur_square_HQ.jpg?format=1500w",
+      "note": "rahul",
+      "date": 1776882306714,
+      "links": [
+        "https://intro-hd.net/excalibur-for-premiere-pro-win-mac/"
+      ]
+    },
+    {
+      "id": "a1776884366019",
+      "category": "Editing",
+      "folderId": "f1776884347922",
+      "name": "Luxury Gold Text",
+      "link": "https://intro-hd.net/videohive-luxury-gold-text/",
+      "icon": "https://intro-hd.net/wp-content/uploads/2026/01/Videohive-Luxury-Gold-Text.jpg",
+      "note": "Videohive Luxury Gold Text",
+      "date": 1776884366019,
+      "links": [
+        "https://intro-hd.net/videohive-luxury-gold-text/"
+      ]
+    },
+    {
+      "id": "a1776885586246",
+      "category": "Editing",
+      "folderId": "f1776882037144",
+      "name": "Project Sorter v1.7.3",
+      "link": "https://intro-hd.net/project-sorter/",
+      "icon": "https://media.imgcdn.org/repo/2025/08/aescripts-project-sorter/6892f8187d99f-aescripts-project-sorter-Icon.webp",
+      "note": "Aescripts",
+      "date": 1776885586246,
+      "links": [
+        "https://intro-hd.net/project-sorter/"
+      ]
+    },
+    {
+      "id": "a1776889043176",
+      "category": "Editing",
+      "folderId": "f1776884347922",
+      "name": "Boris FX Sapphire",
+      "link": "https://intro-hd.net/boris-fx-sapphire-plug-ins-2022-02-for-adobe-ofx-win/",
+      "icon": "https://media.imgcdn.org/repo/2023/03/boris-fx-sapphire-plug-ins/69244c535f71c-boris-fx-sapphire-plug-ins-screenshot1.webp",
+      "note": "Boris FX Sapphire Plug-ins 2026.0.1 Win",
+      "date": 1776889043176,
+      "links": [
+        "https://intro-hd.net/boris-fx-sapphire-plug-ins-2022-02-for-adobe-ofx-win/"
+      ]
+    },
+    {
+      "id": "a1776980223064",
+      "category": "Coding",
+      "folderId": "root",
+      "name": "VS Code",
+      "links": [
+        "https://code.visualstudio.com/Download",
+        "https://github.com/microsoft/vscode"
+      ],
+      "link": "https://code.visualstudio.com/Download",
+      "icon": "https://images.icon-icons.com/3053/PNG/512/microsoft_visual_studio_code_alt_macos_bigsur_icon_189953.png",
+      "note": "",
+      "date": 1776980223064
+    },
+    {
+      "id": "a1776980508395",
+      "category": "Editing",
+      "folderId": "root",
+      "name": "Blender",
+      "links": [
+        "https://www.blender.org/download/",
+        "https://github.com/blender/blender"
+      ],
+      "link": "https://www.blender.org/download/",
+      "icon": "https://files.svgcdn.io/skill-icons/blender-dark.png",
+      "note": "",
+      "date": 1776980508395
+    },
+    {
+      "id": "a1776980946709",
+      "category": "Editing",
+      "folderId": "root",
+      "name": "DaVinci Resolve Studio v.21",
+      "links": [
+        "https://filecr.com/windows/davinci-resolve-0001/?id=518036020000"
+      ],
+      "link": "https://filecr.com/windows/davinci-resolve-0001/?id=518036020000",
+      "icon": "https://upload.wikimedia.org/wikipedia/commons/thumb/4/4d/DaVinci_Resolve_Studio.png/960px-DaVinci_Resolve_Studio.png?_=20221107215930",
+      "note": "",
+      "date": 1776980946709
+    },
+    {
+      "id": "a1776981199623",
+      "category": "Coding",
+      "folderId": "root",
+      "name": "Notepad++",
+      "links": [
+        "https://github.com/notepad-plus-plus/notepad-plus-plus/releases"
+      ],
+      "link": "https://github.com/notepad-plus-plus/notepad-plus-plus/releases",
+      "icon": "https://tweakers.net/ext/i/2007214918.png",
+      "note": "",
+      "date": 1776981199623
+    },
+    {
+      "id": "a1776981594247",
+      "category": "Universal",
+      "folderId": "root",
+      "name": "Dagger",
+      "links": [
+        "https://knightsoftheeditingtable.com/dagger"
+      ],
+      "link": "https://knightsoftheeditingtable.com/dagger",
+      "icon": "https://external-preview.redd.it/dagger-free-extension-to-apply-effects-with-the-search-bar-v0-OHNhdDdteWdzeGZnMW1Z9QA84fTnAL5lXFXIiMKajNwbrzTQs6i93FSe8SDf.png?format=pjpg&auto=webp&s=7157bf3ddf03728e8c107b4354556d2f7c1de155",
+      "note": "It’s not Excalibur",
+      "date": 1776981594247
+    },
+    {
+      "id": "a1776981812552",
+      "category": "APP",
+      "folderId": "root",
+      "name": "WinRAR Professional",
+      "links": [
+        "https://filecr.com/windows/winrar/"
+      ],
+      "link": "https://filecr.com/windows/winrar/",
+      "icon": "https://es.digitaltrends.com/tachyon/sites/13/2025/06/winrar.jpg?fit=1500%2C909",
+      "note": "",
+      "date": 1776981812552
+    },
+    {
+      "id": "a1776982114389",
+      "category": "Editing",
+      "folderId": "root",
+      "name": "Adobe Photoshop",
+      "links": [
+        "https://filecr.com/windows/adobe-photoshop-download-0063/?id=062282707000"
+      ],
+      "link": "https://filecr.com/windows/adobe-photoshop-download-0063/?id=062282707000",
+      "icon": "https://upload.wikimedia.org/wikipedia/commons/thumb/a/af/Adobe_Photoshop_CC_icon.svg/500px-Adobe_Photoshop_CC_icon.svg.png",
+      "note": "",
+      "date": 1776982114389
+    },
+    {
+      "id": "a1777109684025",
+      "category": "APP",
+      "folderId": "root",
+      "name": "VLC",
+      "links": [
+        "https://www.videolan.org/"
+      ],
+      "link": "https://www.videolan.org/",
+      "icon": "https://upload.wikimedia.org/wikipedia/commons/3/38/VLC_icon.png",
+      "note": "",
+      "date": 1777109684025
+    },
+    {
+      "id": "a1777109728059",
+      "category": "APP",
+      "folderId": "root",
+      "name": "LocalSend",
+      "links": [
+        "https://github.com/localsend/localsend/releases"
+      ],
+      "link": "https://github.com/localsend/localsend/releases",
+      "icon": "https://i.redd.it/custom-dark-icons-for-localsend-v0-t4pl702dm5ag1.png?width=256&format=png&auto=webp&s=f98beddcc0ff31768ae9838d02f4a4db9a36258a",
+      "note": "",
+      "date": 1777109728059
+    },
+    {
+      "id": "a1777193937900",
+      "category": "APP",
+      "folderId": "root",
+      "name": "IDM",
+      "links": [
+        "https://filecr.com/windows/internet-download-manager/",
+        "https://www.internetdownloadmanager.com/download.html"
+      ],
+      "link": "https://filecr.com/windows/internet-download-manager/",
+      "icon": "https://i0.wp.com/webkumal.com/storage/2023/03/idm.webp?fit=200%2C200&ssl=1",
+      "note": "",
+      "date": 1777193937900
+    },
+    {
+      "id": "a1777194096442",
+      "category": "APP",
+      "folderId": "root",
+      "name": "CopyQ",
+      "links": [
+        "https://github.com/hluk/CopyQ/releases"
+      ],
+      "link": "https://github.com/hluk/CopyQ/releases",
+      "icon": "https://dl.flathub.org/media/com/github/hluk.copyq.desktop/9f1c63cca57fb581b7e837fc3f541a50/icons/128x128@2/com.github.hluk.copyq.desktop.png",
+      "note": "",
+      "date": 1777194096442
+    },
+    {
+      "id": "a1777194192406",
+      "category": "APP",
+      "folderId": "root",
+      "name": "KeePassXC",
+      "links": [
+        "https://github.com/keepassxreboot/keepassxc/releases"
+      ],
+      "link": "https://github.com/keepassxreboot/keepassxc/releases",
+      "icon": "https://upload.wikimedia.org/wikipedia/commons/thumb/c/c1/KeePassXC.svg/1280px-KeePassXC.svg.png",
+      "note": "",
+      "date": 1777194192406
+    },
+    {
+      "id": "a1777194958132",
+      "category": "APP",
+      "folderId": "root",
+      "name": "Microsoft Office",
+      "links": [
+        "https://filecr.com/windows/microsoft-office-2021-2024/?id=326436315000"
+      ],
+      "link": "https://filecr.com/windows/microsoft-office-2021-2024/?id=326436315000",
+      "icon": "https://upload.wikimedia.org/wikipedia/commons/1/17/Microsoft-Office-365-Emblem.png",
+      "note": "Microsoft Office 2021-2024 Professional Plus Download (Latest version) \n\n(Need the filecr extension)",
+      "date": 1777194958132
+    },
+    {
+      "id": "a1777195597734",
+      "category": "Editing",
+      "folderId": "root",
+      "name": "Adobe Animate",
+      "links": [
+        "https://filecr.com/windows/animate-0018/?id=991711343000"
+      ],
+      "link": "https://filecr.com/windows/animate-0018/?id=991711343000",
+      "icon": "https://upload.wikimedia.org/wikipedia/commons/thumb/0/0f/Adobe_Animate_CC_icon_%282020%29.svg/960px-Adobe_Animate_CC_icon_%282020%29.svg.png",
+      "note": "Adobe Animate 2024 (v24.0.13.5) Pre-Activated - FileCR",
+      "date": 1777195597734
+    },
+    {
+      "id": "a1777195761740",
+      "category": "APP",
+      "folderId": "root",
+      "name": "Revo Uninstaller Pro",
+      "links": [
+        "https://filecr.com/windows/revo-uninstaller/",
+        "https://www.revouninstaller.com/revo-uninstaller-free-download/"
+      ],
+      "link": "https://filecr.com/windows/revo-uninstaller/",
+      "icon": "https://upload.wikimedia.org/wikipedia/commons/8/83/Revouninstallerpro_icon.png",
+      "note": "Revo Uninstaller Pro Download (Latest 2026) - FileCR",
+      "date": 1777195761740
+    },
+    {
+      "id": "a1777195959652",
+      "category": "APP",
+      "folderId": "root",
+      "name": "qBittorrent",
+      "links": [
+        "https://www.qbittorrent.org/download",
+        "https://github.com/qbittorrent/qBittorrent"
+      ],
+      "link": "https://www.qbittorrent.org/download",
+      "icon": "https://upload.wikimedia.org/wikipedia/commons/thumb/6/66/New_qBittorrent_Logo.svg/3840px-New_qBittorrent_Logo.svg.png",
+      "note": "",
+      "date": 1777195959652
+    },
+    {
+      "id": "a1777196137987",
+      "category": "APP",
+      "folderId": "root",
+      "name": "Telegram",
+      "links": [
+        "https://desktop.telegram.org/"
+      ],
+      "link": "https://desktop.telegram.org/",
+      "icon": "https://upload.wikimedia.org/wikipedia/commons/thumb/8/82/Telegram_logo.svg/500px-Telegram_logo.svg.png",
+      "note": "",
+      "date": 1777196137987
+    },
+    {
+      "id": "a1777196271984",
+      "category": "APP",
+      "folderId": "root",
+      "name": "FxSound",
+      "links": [
+        "https://filecr.com/windows/fxsound/"
+      ],
+      "link": "https://filecr.com/windows/fxsound/",
+      "icon": "https://avatars.githubusercontent.com/u/103012411?v=4",
+      "note": "",
+      "date": 1777196271984
+    },
+    {
+      "id": "a1777196353292",
+      "category": "APP",
+      "folderId": "root",
+      "name": "Avro Keyboard ",
+      "links": [
+        "https://www.omicronlab.com/avro-keyboard-download.html"
+      ],
+      "link": "https://www.omicronlab.com/avro-keyboard-download.html",
+      "icon": "https://upload.wikimedia.org/wikipedia/commons/f/f9/%E0%A6%85%E0%A6%AD%E0%A7%8D%E0%A6%B0_%E0%A6%95%E0%A7%80-%E0%A6%AC%E0%A7%8B%E0%A6%B0%E0%A7%8D%E0%A6%A1%E0%A7%87%E0%A6%B0_%E0%A6%B2%E0%A7%8B%E0%A6%97%E0%A7%8B.jpg",
+      "note": "",
+      "date": 1777196353292
+    },
+    {
+      "id": "a1777196547675",
+      "category": "APP",
+      "folderId": "root",
+      "name": "Everything",
+      "links": [
+        "https://www.voidtools.com/downloads/"
+      ],
+      "link": "https://www.voidtools.com/downloads/",
+      "icon": "https://img.utdstc.com/icon/a61/660/a61660f9dade9b20816e169d7cde67bb19e56bcfc942e8ecc47437f12e79bb2c:200",
+      "note": "",
+      "date": 1777196547675
+    },
+    {
+      "id": "a1777472685245",
+      "category": "APP",
+      "folderId": "root",
+      "name": "Syncthing",
+      "links": [
+        "https://github.com/syncthing/syncthing/releases"
+      ],
+      "link": "https://github.com/syncthing/syncthing/releases",
+      "icon": "https://upload.wikimedia.org/wikipedia/commons/thumb/5/57/Syncthing_Logo.svg/250px-Syncthing_Logo.svg.png",
+      "note": "",
+      "date": 1777472685245
+    },
+    {
+      "id": "a1777569049559",
+      "category": "Editing",
+      "folderId": "f1776884347922",
+      "name": "Easy Workflow Pro v3.6.0 ",
+      "links": [
+        "https://intro-hd.net/easy-workflow-pro-after-effects-extension/"
+      ],
+      "link": "https://intro-hd.net/easy-workflow-pro-after-effects-extension/",
+      "icon": "https://gfx-hub.co/uploads/posts/2026-04/easy-workflow-pro.webp",
+      "note": "After Effects Extension",
+      "date": 1777569049559
+    },
+    {
+      "id": "a1777579997408",
+      "category": "Coding",
+      "folderId": "root",
+      "name": "Github",
+      "links": [
+        "https://desktop.github.com/download/"
+      ],
+      "link": "https://desktop.github.com/download/",
+      "icon": "https://images.icon-icons.com/2699/PNG/512/github_logo_icon_169115.png",
+      "note": "",
+      "date": 1777579997408
+    }
+  ],
+  "expanded": [
+    "f1776884347922",
+    "f1776882037144"
+  ],
+  "settings": {
+    "view": "grid-big",
+    "sort": "name-asc"
+  }
+}
