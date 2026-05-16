@@ -166,7 +166,7 @@
       ],
       "link": "https://knightsoftheeditingtable.com/dagger",
       "icon": "https://external-preview.redd.it/dagger-free-extension-to-apply-effects-with-the-search-bar-v0-OHNhdDdteWdzeGZnMW1Z9QA84fTnAL5lXFXIiMKajNwbrzTQs6i93FSe8SDf.png?format=pjpg&auto=webp&s=7157bf3ddf03728e8c107b4354556d2f7c1de155",
-      "note": "It’s not Excalibur",
+      "note": "Itâs not Excalibur",
       "date": 1776981594247
     },
     {
@@ -405,6 +405,19 @@
       "icon": "https://images.icon-icons.com/2699/PNG/512/github_logo_icon_169115.png",
       "note": "",
       "date": 1777579997408
+    },
+    {
+      "id": "a1778919905415",
+      "category": "Editing",
+      "folderId": "f1776884347922",
+      "name": "Deep Glow",
+      "links": [
+        "https://intro-hd.net/aescripts-deep-glow/"
+      ],
+      "link": "https://intro-hd.net/aescripts-deep-glow/",
+      "icon": "https://intro-hd.net/wp-content/uploads/2025/06/Aescripts-Deep-Glow.jpg",
+      "note": "",
+      "date": 1778919905415
     }
   ],
   "expanded": [
